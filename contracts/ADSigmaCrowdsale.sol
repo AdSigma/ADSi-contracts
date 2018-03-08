@@ -131,7 +131,7 @@ contract ADSigmaCrowdsale is TokenHolder,FinalizableCrowdsale {
         uint256 newTotalSupply = token.totalSupply().mul(200).div(100);
 
         // 10% of the total number of ADSI tokens will be allocated ADSigma team
-        token.issue(walletTeam, newTotalSupply.mul(30).div(100));
+        token.issue(walletTeam, newTotalSupply.mul(20).div(100));
 
         // 30% of the total number of ADSI tokens will be allocated ADSigma reserves
         token.issue(walletReserve, newTotalSupply.mul(30).div(100));

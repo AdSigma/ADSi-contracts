@@ -54,12 +54,20 @@ else
   start_testrpc
 fi
 
-if [ "$SOLIDITY_COVERAGE" = true ]; then
-  node_modules/.bin/solidity-coverage
+keepgoing=1
+trap '{ echo "sigint"; keepgoing=0; }' SIGINT
 
-  if [ "$CONTINUOUS_INTEGRATION" = true ]; then
-    cat coverage/lcov.info | node_modules/.bin/coveralls
-  fi
-else
-  node_modules/.bin/truffle test "$@"
-fi
+while (( keepgoing )); do
+    echo "sleeping"
+    sleep 5
+done
+
+# if [ "$SOLIDITY_COVERAGE" = true ]; then
+#   node_modules/.bin/solidity-coverage
+
+#   if [ "$CONTINUOUS_INTEGRATION" = true ]; then
+#     cat coverage/lcov.info | node_modules/.bin/coveralls
+#   fi
+# else
+#   node_modules/.bin/truffle test "$@"
+# fi

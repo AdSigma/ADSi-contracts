@@ -1,8 +1,8 @@
 import expectThrow from './helpers/expectThrow';
 import web3EthAbi from 'web3-eth-abi';
 
-const TestToken = artifacts.require('.helpers/TestERC20Token.sol');
-const MultiSigWalletMock = artifacts.require('./heplers/MultiSigWalletMock.sol');
+const TestToken = artifacts.require('./helpers/TestERC20Token.sol');
+const MultiSigWalletMock = artifacts.require('./helpers/MultiSigWalletMock.sol');
 
 contract('MultiSigWallet', (accounts) => {
     const MAX_OWNER_COUNT = 50;

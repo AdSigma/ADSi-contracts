@@ -17,7 +17,7 @@ const should = require('chai')
 const ADSigmaCrowdsale = artifacts.require('../contracts/ADSigmaCrowdsale')
 const ADSigmaSmartToken = artifacts.require('ADSigmaSmartToken.sol')
 
-contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, walletWebydo, walletReserve]) {
+contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, walletReserve]) {
 
     const value = ether(1)
 
@@ -36,7 +36,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
             this.endTime,
             wallet,
             walletTeam,
-            walletWebydo,
             walletReserve,
             this.hardCap,
             this.token.address,
@@ -96,7 +95,7 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
             })
 
             try {
-                await this.token.transfer(walletWebydo, 1, {
+                await this.token.transfer(walletTeam, 1, {
                     from: investor
                 });
                 assert(false, "didn't throw");
@@ -105,23 +104,23 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
             }
         })
 
-                                it('should allow transfer after finalize', async function() {
+        it('should allow transfer after finalize', async function() {
 
-                                    await increaseTimeTo(this.startTime)
-                                    await this.crowdsale.sendTransaction({
-                                        value: value,
-                                        from: investor
-                                    })
+            await increaseTimeTo(this.startTime)
+            await this.crowdsale.sendTransaction({
+                value: value,
+                from: investor
+            })
 
-                                    await increaseTimeTo(this.afterEndTime)
-                                    await this.crowdsale.finalize({
-                                        from: owner
-                                    })
+            await increaseTimeTo(this.afterEndTime)
+            await this.crowdsale.finalize({
+                from: owner
+            })
 
-                                    await this.token.transfer(walletWebydo, 1, {
-                                        from: walletReserve
-                                    });
-                                })
+            await this.token.transfer(walletTeam, 1, {
+                from: walletReserve
+            });
+        })
     })
 
     describe('Finalize allocation', function() {
@@ -141,18 +140,11 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
             this.totalSupply = await this.token.totalSupply()
         })
 
-        it('Allocate Team token amount as 10% of the total supply', async function() {
-            const expectedTeamTokenAmount = this.totalSupply.mul(0.1);
+        it('Allocate Team token amount as 20% of the total supply', async function() {
+            const expectedTeamTokenAmount = this.totalSupply.mul(0.20);
             let walletTeamBalance = await this.token.balanceOf(walletTeam);
 
             walletTeamBalance.should.be.bignumber.equal(expectedTeamTokenAmount);
-        })
-
-        it('Allocate WEBYDO token amount as 10% of the total supply', async function() {
-            const expectedOEMTokenAmount = this.totalSupply.mul(0.1);
-            let walletWebydoBalance = await this.token.balanceOf(walletWebydo);
-
-            walletWebydoBalance.should.be.bignumber.equal(expectedOEMTokenAmount);
         })
 
 
@@ -509,7 +501,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
                     this.endTime,
                     wallet,
                     0x0,
-                    walletWebydo,
                     walletReserve,
                     this.hardCap,
                     this.token.address,
@@ -528,33 +519,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
             assert(false, "did not throw with invalid walletTeam address")
         })
 
-        it('should initilaized with a valid walletWebydo adderss', async function() {
-            try {
-                this.crowdsale = await ADSigmaCrowdsale.new(this.startTime,
-                    this.endTime,
-                    wallet,
-                    walletTeam,
-                    0x0,
-                    walletReserve,
-                    this.hardCap,
-                    this.token.address,
-
-                    {
-                        from: owner
-                    })
-
-                await this.token.transferOwnership(this.crowdsale.address, {from: owner});
-
-
-                await this.crowdsale.claimTokenOwnership({from: owner})
-
-            } catch (error) {
-                return utils.ensureException(error);
-            }
-
-            assert(false, "did not throw with invalid walletWebydo address")
-        })
-
 
 
         it('should initilaized with a valid walletReserve adderss', async function() {
@@ -563,7 +527,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
                     this.endTime,
                     wallet,
                     walletTeam,
-                    walletWebydo,
                     0x0,
                     this.hardCap,
                     this.token.address,
@@ -590,7 +553,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
                     this.endTime,
                     wallet,
                     walletTeam,
-                    walletWebydo,
                     walletReserve,
                     0,
                     this.token.address,
@@ -617,7 +579,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
                     this.endTime,
                     wallet,
                     walletTeam,
-                    walletWebydo,
                     walletReserve,
                     this.hardCap,
                     0x0,
@@ -645,7 +606,6 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
                 this.endTime,
                 wallet,
                 walletTeam,
-                walletWebydo,
                 walletReserve,
                 this.hardCap,
                 this.token.address,

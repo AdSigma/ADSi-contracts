@@ -7,6 +7,8 @@ module.exports = {
             host: 'localhost',
             port: 8545,
             network_id: '*', // Match any network id
+            gas: 0xfffffffffff,
+            gasPrice: 0x01
         },
         coverage: {
             host: "localhost",
@@ -14,7 +16,17 @@ module.exports = {
             port: 8555,
             gas: 0xfffffffffff,
             gasPrice: 0x01
+        },
+        ropsten:  {
+            network_id: 3,
+            host: "127.0.0.1",
+            port: 8545,
+            gas: 2900000
         }
+    },
+    rpc: {
+        host: '127.0.0.1',
+        post: 8080
     },
     mocha: {
         useColors: true,
