@@ -32,7 +32,7 @@ contract('FinalizableCrowdsale', function([_, owner, wallet, thirdparty]) {
         this.afterEndTime = this.endTime + duration.seconds(1);
 
         this.token = await MintableToken.new();
-        this.crowdsale = await FinalizableCrowdsale.new(this.startTime, this.endTime, rate, wallet, this.token.address, {
+        this.crowdsale = await FinalizableCrowdsale.new(this.startTime, this.endTime, rate, rate, wallet, this.token.address, {
             from: owner
         });
     });

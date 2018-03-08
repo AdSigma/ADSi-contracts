@@ -14,10 +14,12 @@ const Crowdsale = artifacts.require('./helpers/CrowdsaleMock');
 const ADSigmaSmartToken = artifacts.require('ADSigmaSmartToken')
 
 contract('Crowdsale', function([_, investor, wallet, purchaser]) {
-    const rate = new BigNumber(1000);
+    const presale_rate = new BigNumber(2000);
+    const ico_rate = new BigNumber(1000);
     const value = ether(4);
 
-    const expectedTokenAmount = rate.mul(value);
+    const expectedTokenAmount = presale_rate.mul(value);
+    const icoExpectedTokenAmount = ico_rate.mul(value);
 
     before(async function() {
         //Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
@@ -30,7 +32,7 @@ contract('Crowdsale', function([_, investor, wallet, purchaser]) {
         this.afterEndTime = this.endTime + duration.seconds(1);
 
         this.token = await ADSigmaSmartToken.new();
-        this.crowdsale = await Crowdsale.new(this.startTime, this.endTime, rate, wallet, this.token.address);
+        this.crowdsale = await Crowdsale.new(this.startTime, this.endTime, presale_rate, ico_rate, wallet, this.token.address);
 
         await this.token.transferOwnership(this.crowdsale.address);
 
@@ -175,6 +177,48 @@ contract('Crowdsale', function([_, investor, wallet, purchaser]) {
             });
             const post = web3.eth.getBalance(wallet);
             post.minus(pre).should.be.bignumber.equal(value);
+        });
+    });
+
+    describe('should get rates according to phase', function() {
+        beforeEach(async function() {
+            await increaseTimeTo(this.startTime);
+        });
+
+        it('should get presale rate on purchase during presale phase', async function() {
+            const {
+                logs
+            } = await this.crowdsale.buyTokens(investor, {
+                value: value,
+                from: purchaser
+            });
+
+            const event = logs.find(e => e.event === 'TokenPurchase');
+
+            should.exist(event);
+            event.args.purchaser.should.equal(purchaser);
+            event.args.beneficiary.should.equal(investor);
+            event.args.value.should.be.bignumber.equal(value);
+            event.args.amount.should.be.bignumber.equal(expectedTokenAmount);
+        });
+
+        it('should get ico rate on purchase during ico phase', async function() {
+            await this.crowdsale.setPhase('ico');
+
+            const {
+                logs
+            } = await this.crowdsale.buyTokens(investor, {
+                value: value,
+                from: purchaser
+            });
+
+            const event = logs.find(e => e.event === 'TokenPurchase');
+
+            should.exist(event);
+            event.args.purchaser.should.equal(purchaser);
+            event.args.beneficiary.should.equal(investor);
+            event.args.value.should.be.bignumber.equal(value);
+            event.args.amount.should.be.bignumber.equal(icoExpectedTokenAmount);
         });
     });
 });
