@@ -23,10 +23,11 @@ contract ADSigmaCrowdsale is TokenHolder,FinalizableCrowdsale {
     uint8 public constant MAX_TOKEN_GRANTEES = 10;
 
     //we limit the amount of tokens we can mint to a grantee so it won't be exploit.
-    uint256 public constant MAX_GRANTEE_TOKENS_ALLOWED = 250000000 * 10 ** 18;    
+    uint256 public constant MAX_GRANTEE_TOKENS_ALLOWED = 10000000 * 10 ** 18;    
 
     // ADSI to ETH base rate
-    uint256 public constant EXCHANGE_RATE = 15000;
+    uint256 public constant PRESALE_EXCHANGE_RATE = 3750;
+    uint256 public constant ICO_EXCHANGE_RATE = 3000;
 
     // =================================================================================================================
     //                                      Modifiers
@@ -97,7 +98,7 @@ contract ADSigmaCrowdsale is TokenHolder,FinalizableCrowdsale {
     uint256 _cap,
     ADSigmaSmartToken _adsigmaSmartToken)
     public
-    Crowdsale(_startTime, _endTime, EXCHANGE_RATE, _wallet, _adsigmaSmartToken) {
+    Crowdsale(_startTime, _endTime, PRESALE_EXCHANGE_RATE, ICO_EXCHANGE_RATE, _wallet, _adsigmaSmartToken) {
         require(_walletTeam != address(0));
         require(_walletReserve != address(0));
         require(_adsigmaSmartToken != address(0));
