@@ -16,6 +16,8 @@ import '../ADSigmaSmartToken.sol';
 contract Crowdsale {
     using SafeMath for uint256;
 
+    uint256 public constant TOKEN_CAP = 60000000;
+
     // The token being sold
     ADSigmaSmartToken public token;
 
@@ -35,6 +37,8 @@ contract Crowdsale {
     // amount of raised money in wei
     uint256 public weiRaised;
 
+    uint256 public tokenCap;
+
     /**
      * event for token purchase logging
      * @param purchaser who paid for the tokens
@@ -43,6 +47,7 @@ contract Crowdsale {
      * @param amount amount of tokens purchased
      */
     event TokenPurchase(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
+    event TokenIssue(address indexed beneficiary, uint256 amount);
 
     function Crowdsale(uint256 _startTime, uint256 _endTime, uint256 _presale_rate, uint256 _ico_rate, address _wallet, ADSigmaSmartToken _token) public {
         // require(_startTime >= now);
@@ -80,7 +85,9 @@ contract Crowdsale {
 
         // calculate token amount to be created
         uint256 rate = phase == 'presale' ? presale_rate : ico_rate;
-        uint256 tokens = weiAmount.mul(rate);
+        uint256 tokens = weiAmount.mul(rate).div(1 ether);
+
+        require(token.totalSupply() + tokens <= TOKEN_CAP);
 
         // update state
         weiRaised = weiRaised.add(weiAmount);
@@ -89,6 +96,15 @@ contract Crowdsale {
         TokenPurchase(msg.sender, beneficiary, weiAmount, tokens);
 
         forwardFunds();
+    }
+
+    function issueTokens(address beneficiary, uint256 tokens) public {
+        require(beneficiary != address(0));
+        require(now >= startTime && now <= endTime);
+        require(token.totalSupply() + tokens <= TOKEN_CAP);
+
+        token.issue(beneficiary, tokens);
+        TokenIssue(beneficiary, tokens);
     }
 
     // send ether to the fund collection wallet

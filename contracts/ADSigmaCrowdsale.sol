@@ -127,15 +127,13 @@ contract ADSigmaCrowdsale is TokenHolder,FinalizableCrowdsale {
             token.issue(presaleGranteesMapKeys[i], presaleGranteesMap[presaleGranteesMapKeys[i]]);
         }
 
-        // Adding 50% of the total token supply (50% were generated during the crowdsale)
-        // 50 * 2 = 100
-        uint256 newTotalSupply = token.totalSupply().mul(200).div(100);
+        uint256 remainingTokens = 60000000 - token.totalSupply();
 
         // 10% of the total number of ADSI tokens will be allocated ADSigma team
-        token.issue(walletTeam, newTotalSupply.mul(20).div(100));
+        token.issue(walletTeam, 10000000);
 
         // 30% of the total number of ADSI tokens will be allocated ADSigma reserves
-        token.issue(walletReserve, newTotalSupply.mul(30).div(100));
+        token.issue(walletReserve, 30000000 + remainingTokens);
 
         // Re-enable transfers after the token sale.
         token.disableTransfers(false);
@@ -224,6 +222,10 @@ contract ADSigmaCrowdsale is TokenHolder,FinalizableCrowdsale {
     function setFiatRaisedConvertedToWei(uint256 _fiatRaisedConvertedToWei) external onlyOwner onlyWhileSale {
         fiatRaisedConvertedToWei = _fiatRaisedConvertedToWei;
         FiatRaisedUpdated(msg.sender, fiatRaisedConvertedToWei);
+    }
+
+    function issueTokens(address beneficiary, uint256 tokens) public onlyOwner {
+        super.issueTokens(beneficiary,tokens);
     }
 
 

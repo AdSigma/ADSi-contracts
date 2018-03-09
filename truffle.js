@@ -7,14 +7,14 @@ module.exports = {
             host: 'localhost',
             port: 8545,
             network_id: '*', // Match any network id
-            gas: 0xfffffffffff,
+            gas: 0xffffffffffff,
             gasPrice: 0x01
         },
         coverage: {
             host: "localhost",
             network_id: "*",
             port: 8555,
-            gas: 0xfffffffffff,
+            gas: 0xffffffffffff,
             gasPrice: 0x01
         },
         ropsten:  {

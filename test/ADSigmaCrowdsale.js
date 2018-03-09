@@ -52,7 +52,7 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
 
     describe('Token destroy', function() {
 
-        it('should not allow destroy before after finalize', async function() {
+        it('should not allow destroy before finalize', async function() {
 
             await increaseTimeTo(this.startTime)
             await this.crowdsale.sendTransaction({
@@ -140,16 +140,16 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
             this.totalSupply = await this.token.totalSupply()
         })
 
-        it('Allocate Team token amount as 20% of the total supply', async function() {
-            const expectedTeamTokenAmount = this.totalSupply.mul(0.20);
+        it('Allocate Team token amount as 10% of the total supply', async function() {
+            const expectedTeamTokenAmount = 10000000;
             let walletTeamBalance = await this.token.balanceOf(walletTeam);
 
             walletTeamBalance.should.be.bignumber.equal(expectedTeamTokenAmount);
         })
 
 
-        it('Allocate Reserve token amount as 30% of the total supply', async function() {
-            const expectedReserveTokenAmount = this.totalSupply.mul(0.30);
+        it('Allocate Reserve token amount as 30% and remaining amount of the total supply', async function() {
+            const expectedReserveTokenAmount = 30000000 + 60000000 - 3750;
             let walletReserveBalance = await this.token.balanceOf(walletReserve);
 
             walletReserveBalance.should.be.bignumber.equal(expectedReserveTokenAmount);
