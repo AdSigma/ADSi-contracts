@@ -18,8 +18,8 @@ contract('Crowdsale', function([_, investor, wallet, purchaser]) {
     const ico_rate = new BigNumber(1000);
     const value = ether(4);
 
-    const expectedTokenAmount = presale_rate.mul(value).div(ether(1));
-    const icoExpectedTokenAmount = ico_rate.mul(value).div(ether(1));
+    const expectedTokenAmount = presale_rate.mul(value);
+    const icoExpectedTokenAmount = ico_rate.mul(value);
 
     before(async function() {
         //Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc

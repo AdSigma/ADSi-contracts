@@ -139,7 +139,7 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
         })
 
         it('Allocate Team token amount as 10% of the total supply', async function() {
-            const expectedTeamTokenAmount = 10000000;
+            const expectedTeamTokenAmount = ether(10000000);
             let walletTeamBalance = await this.token.balanceOf(walletTeam);
 
             walletTeamBalance.should.be.bignumber.equal(expectedTeamTokenAmount);
@@ -147,9 +147,9 @@ contract('ADSigmaCrowdsale', function([_, investor, owner, wallet, walletTeam, w
 
 
         it('Allocate Reserve token amount as 30% and remaining amount of the total supply', async function() {
-            const expectedReserveTokenAmount = 30000000 + 60000000 - 3750;
+            const expectedReserveTokenAmount = 30000000  + 60000000  - 3750 ;
             let walletReserveBalance = await this.token.balanceOf(walletReserve);
-
+            walletReserveBalance /= ether(1);
             walletReserveBalance.should.be.bignumber.equal(expectedReserveTokenAmount);
         })
 

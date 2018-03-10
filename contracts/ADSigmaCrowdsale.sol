@@ -91,13 +91,13 @@ contract ADSigmaCrowdsale is TokenHolder,FinalizableCrowdsale {
     function finalization() internal onlyOwner {
         super.finalization();
 
-        uint256 remainingTokens = 60000000 - token.totalSupply();
+        uint256 remainingTokens = 60000000 ether - token.totalSupply();
 
         // 10% of the total number of ADSI tokens will be allocated ADSigma team
-        token.issue(walletTeam, 10000000);
+        token.issue(walletTeam, 10000000 ether);
 
         // 30% of the total number of ADSI tokens will be allocated ADSigma reserves
-        token.issue(walletReserve, 30000000 + remainingTokens);
+        token.issue(walletReserve, 30000000 ether + remainingTokens);
 
         // Re-enable transfers after the token sale.
         token.disableTransfers(false);

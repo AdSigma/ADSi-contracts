@@ -16,7 +16,7 @@ import '../ADSigmaSmartToken.sol';
 contract Crowdsale {
     using SafeMath for uint256;
 
-    uint256 public constant TOKEN_CAP = 60000000;
+    uint256 public constant TOKEN_CAP = 60000000 ether;
 
     // The token being sold
     ADSigmaSmartToken public token;
@@ -85,7 +85,7 @@ contract Crowdsale {
 
         // calculate token amount to be created
         uint256 rate = phase == 'presale' ? presale_rate : ico_rate;
-        uint256 tokens = weiAmount.mul(rate).div(1 ether);
+        uint256 tokens = weiAmount.mul(rate);
 
         require(token.totalSupply() + tokens <= TOKEN_CAP);
 
@@ -102,6 +102,8 @@ contract Crowdsale {
         require(beneficiary != address(0));
         require(now >= startTime && now <= endTime);
         require(token.totalSupply() + tokens <= TOKEN_CAP);
+
+        tokens = tokens.mul(1 ether);
 
         token.issue(beneficiary, tokens);
         TokenIssue(beneficiary, tokens);
