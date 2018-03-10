@@ -50,7 +50,7 @@ contract Crowdsale {
     event TokenIssue(address indexed beneficiary, uint256 amount);
 
     function Crowdsale(uint256 _startTime, uint256 _endTime, uint256 _presale_rate, uint256 _ico_rate, address _wallet, ADSigmaSmartToken _token) public {
-        // require(_startTime >= now);
+        require(_startTime >= now);
         require(_endTime >= _startTime);
         require(_presale_rate > 0);
         require(_ico_rate > 0);
