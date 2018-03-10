@@ -12,7 +12,6 @@ module.exports = function(deployer) {
     const endTime = startTime + DAY * 14;
     const rate = new web3.BigNumber(1000)
     const wallet = web3.eth.accounts[0]
-    const hard_cap = 10000000000000000000000
 
     deployer.deploy(ADSigmaSmartToken).then(function(e) {
         return deployer.deploy(ADSigmaCrowdsale,
@@ -21,7 +20,6 @@ module.exports = function(deployer) {
             web3.eth.accounts[0],
             web3.eth.accounts[1],
             web3.eth.accounts[2],
-            hard_cap,
             ADSigmaSmartToken.address)
     })
      

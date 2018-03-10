@@ -37,12 +37,6 @@ contract('FinalizableCrowdsale', function([_, owner, wallet, thirdparty]) {
         });
     });
 
-    it('cannot be finalized before ending', async function() {
-        await this.crowdsale.finalize({
-            from: owner
-        }).should.be.rejectedWith(EVMThrow);
-    });
-
     it('cannot be finalized by third party after ending', async function() {
         await increaseTimeTo(this.afterEndTime);
         await this.crowdsale.finalize({

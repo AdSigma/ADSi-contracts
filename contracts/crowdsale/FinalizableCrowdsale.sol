@@ -22,12 +22,12 @@ contract FinalizableCrowdsale is Crowdsale, Claimable {
    */
   function finalize() onlyOwner public {
     require(!isFinalized);
-    require(hasEnded());
 
     finalization();
     Finalized();
 
     isFinalized = true;
+    endTime = now;
   }
 
   /**
