@@ -100,7 +100,6 @@ contract Crowdsale {
 
     function issueTokens(address beneficiary, uint256 tokens) public {
         require(beneficiary != address(0));
-        require(now >= startTime && now <= endTime);
         require(token.totalSupply() + tokens <= TOKEN_CAP);
 
         tokens = tokens.mul(1 ether);
